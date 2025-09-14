@@ -1,7 +1,7 @@
 package ccl
 
 // Map function for Array
-func MapArr[T comparable](array []T, callback func(element T) T) []T {
+func Map[T comparable](array []T, callback func(element T) T) []T {
 	var newArr []T
 	for _, value := range array {
 		newArr = append(newArr, callback(value))
@@ -10,7 +10,7 @@ func MapArr[T comparable](array []T, callback func(element T) T) []T {
 }
 
 // Filter function for Array
-func FilterArr[T comparable](array []T, callback func(element T) bool) []T {
+func Filter[T comparable](array []T, callback func(element T) bool) []T {
 	var newArr []T
 	for _, value := range array {
 		if callback(value) {
@@ -21,7 +21,7 @@ func FilterArr[T comparable](array []T, callback func(element T) bool) []T {
 }
 
 // Reduce function for Array
-func ReduceArr[T, K comparable](array []T, callback func(accumulator K, element T) K, initial K) K {
+func Reduce[T, K comparable](array []T, callback func(accumulator K, element T) K, initial K) K {
 	var acc = initial
 	for _, value := range array {
 		acc = callback(acc, value)
