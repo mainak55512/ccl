@@ -6,50 +6,99 @@ import (
 )
 
 type Enum struct {
-	_id    int
-	_items map[string]int
+	_id      int
+	_freezed bool
+	_items   map[string]any
 }
 
 func CreateEnum() Enum {
 	return Enum{
-		_id:    1,
-		_items: make(map[string]int),
+		_id:      1,
+		_freezed: false,
+		_items:   make(map[string]any),
 	}
+}
+
+func (e *Enum) Freeze() {
+	e._freezed = true
 }
 
 func (e *Enum) Add(element string) {
-	_, ok := e._items[element]
-	if !ok {
-		e._items[element] = e._id
+	if !e._freezed {
+		_, ok := e._items[element]
+		if !ok {
+			e._id++
+			e._items[element] = e._id
+		}
 	}
-	e._id++
 }
 
-// USAGE:
-//
-//	en := CreateEnum()
-//	en.Add("SUCCESS")
-//	en.Add("FAILURE")
-//	en.Add("PENDING")
-//	en.Add("IN_PROGRESS")
-//
-//	status := "UNKNOWN"
-//
-//	state, err := en.Match(status, map[string]func() any{
-//		"SUCCESS": func() any { return 1 },
-//		"FAILURE": func() any { return 2 },
-//		// "PENDING":     func() any { return 3 },
-//		"IN_PROGRESS": func() any { return 4 },
-//		"_DEFAULT_":   func() any { return 0 },
-//	})
-//
-//	if err != nil {
-//		fmt.Println(err) // => Following branches are unattended: PENDING
-//	} else {
-//
-//		fmt.Println("State:", state)
-//	}
-func (e *Enum) Match(item string, matchObj map[string]func() any) (any, error) {
+func (e *Enum) AddWithValue(element string, value any) {
+	if !e._freezed {
+		_, ok := e._items[element]
+		if !ok {
+			e._items[element] = value
+			val, ok := value.(int)
+			if ok {
+				e._id = val
+			}
+		}
+	}
+}
+
+func (e Enum) Varient(value any) (string, error) {
+	item, ok := value.(string)
+	if ok {
+		_, ok := e._items[item]
+		if ok {
+			return item, nil
+		} else {
+			for k := range e._items {
+				val, ok := e._items[k]
+				if ok && val == value {
+					return k, nil
+				}
+			}
+		}
+	} else {
+		for k := range e._items {
+			val, ok := e._items[k]
+			if ok && val == value {
+				return k, nil
+			}
+		}
+	}
+	return "", fmt.Errorf("Enum varient doesn't exist")
+}
+
+/*
+Usage:
+------
+
+	en := CreateEnum()
+	en.AddWithValue("SUCCESS", 201)
+	en.AddWithValue("FAILURE", 404)
+	en.AddWithValue("PENDING", 312)
+	en.AddWithValue("IN_PROGRESS", 240)
+	en.Freeze()
+
+	status := 404 // or, "FAILURE"
+
+	state, err := en.Match(status, map[string]func() any{
+		"SUCCESS":     func() any { return 1 },
+		"FAILURE":     func() any { return 2 },
+		"PENDING":     func() any { return 3 },
+		"IN_PROGRESS": func() any { return 4 },
+		"_DEFAULT_":   func() any { return 0 },
+	})
+
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("State:", state) // State: 2
+	}
+*/
+func (e Enum) Match(item any, matchObj map[string]func() any) (any, error) {
 	var unattendedBranches []string
 	for k := range e._items {
 		_, ok := matchObj[k]
@@ -62,7 +111,11 @@ func (e *Enum) Match(item string, matchObj map[string]func() any) (any, error) {
 		ForEach(unattendedBranches, func(e string) { errmsg += e + "," })
 		return nil, fmt.Errorf("%s", strings.TrimSuffix(errmsg, ","))
 	} else {
-		fn, ok := matchObj[item]
+		varient, err := e.Varient(item)
+		if err != nil {
+			return nil, fmt.Errorf("Invalid Enum varient")
+		}
+		fn, ok := matchObj[varient]
 		if ok {
 			return fn(), nil
 		} else {
