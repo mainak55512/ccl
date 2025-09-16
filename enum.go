@@ -111,10 +111,7 @@ func (e Enum) Match(item any, matchObj map[string]func() any) (any, error) {
 		ForEach(unattendedBranches, func(e string) { errmsg += e + "," })
 		return nil, fmt.Errorf("%s", strings.TrimSuffix(errmsg, ","))
 	} else {
-		varient, err := e.Varient(item)
-		if err != nil {
-			return nil, fmt.Errorf("Invalid Enum varient")
-		}
+		varient, _ := e.Varient(item)
 		fn, ok := matchObj[varient]
 		if ok {
 			return fn(), nil
