@@ -98,7 +98,7 @@ Usage:
 		fmt.Println("State:", state) // State: 2
 	}
 */
-func (e Enum) Match(item any, matchObj map[string]func() any) (any, error) {
+func (e Enum) Match(item any, matchObj map[string]func() any) any {
 	var unattendedBranches []string
 	for k := range e._items {
 		_, ok := matchObj[k]
@@ -109,18 +109,18 @@ func (e Enum) Match(item any, matchObj map[string]func() any) (any, error) {
 	if len(unattendedBranches) > 0 {
 		errmsg := "Following branches are unattended: "
 		ForEach(unattendedBranches, func(e string) { errmsg += e + "," })
-		return nil, fmt.Errorf("%s", strings.TrimSuffix(errmsg, ","))
+		panic(fmt.Errorf("%s", strings.TrimSuffix(errmsg, ",")))
 	} else {
 		varient, _ := e.Varient(item)
 		fn, ok := matchObj[varient]
 		if ok {
-			return fn(), nil
+			return fn()
 		} else {
 			fn, ok := matchObj["_DEFAULT_"]
 			if ok {
-				return fn(), nil
+				return fn()
 			}
 		}
 	}
-	return nil, nil
+	return nil
 }
