@@ -54,3 +54,13 @@ func Reverse[T comparable](array []T) []T {
 	}
 	return newArr
 }
+
+func Unique[T comparable](array []T) []T {
+	var stagingArr []T
+	ForEach(array, func(e T) {
+		if Find(stagingArr, e) == -1 {
+			stagingArr = append(stagingArr, e)
+		}
+	})
+	return stagingArr
+}

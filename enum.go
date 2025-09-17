@@ -74,13 +74,13 @@ Usage:
 ------
 
 	en := CreateEnum()
-	en.AddWithValue("SUCCESS", 201)
-	en.AddWithValue("FAILURE", 404)
-	en.AddWithValue("PENDING", 312)
-	en.AddWithValue("IN_PROGRESS", 240)
+	en.AddWithValue("SUCCESS", 5) // => 5
+	en.Add("FAILURE") // => 6
+	en.Add("PENDING") // => 7
+	en.Add("IN_PROGRESS") // => 8
 	en.Freeze()
 
-	status := 404 // or, "FAILURE"
+	status := 6 // or, status := "FAILURE"
 
 	state, err := en.Match(status, map[string]func() any{
 		"SUCCESS":     func() any { return 1 },
