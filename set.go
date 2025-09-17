@@ -9,9 +9,9 @@ func CreateSet[T comparable]() Set[T] {
 }
 
 func CreateSetFromArray[T comparable](array []T) Set[T] {
-	SetArr := Unique(array)
+	setArr := Unique(array)
 	return Set[T]{
-		_items: SetArr,
+		_items: setArr,
 	}
 }
 
