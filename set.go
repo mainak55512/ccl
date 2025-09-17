@@ -8,6 +8,7 @@ func CreateSet[T comparable]() Set[T] {
 	return Set[T]{}
 }
 
+// Creates Set from existing array
 func CreateSetFromArray[T comparable](array []T) Set[T] {
 	setArr := Unique(array)
 	return Set[T]{
@@ -21,6 +22,7 @@ func (s *Set[T]) Add(element T) {
 	}
 }
 
+// Converts the Set to Array
 func (s Set[T]) Array() []T {
 	return s._items
 }

@@ -23,6 +23,7 @@ func (e *Enum) Freeze() {
 	e._freezed = true
 }
 
+// Add method auto increments value under the hood
 func (e *Enum) Add(element string) {
 	if !e._freezed {
 		if _, ok := e._items[element]; !ok {
@@ -32,6 +33,7 @@ func (e *Enum) Add(element string) {
 	}
 }
 
+// AddWithValue lets user specify unique value for each entry
 func (e *Enum) AddWithValue(element string, value any) {
 	if !e._freezed {
 		if _, ok := e._items[element]; !ok {
@@ -52,6 +54,7 @@ func _varientHelper[T comparable](mapObj map[string]any, value T) string {
 	return ""
 }
 
+// Returns the Varient(string) for the Enum
 func (e Enum) Varient(value any) (string, error) {
 	if item, ok := value.(string); ok {
 		if _, ok := e._items[item]; ok {
@@ -70,6 +73,8 @@ func (e Enum) Varient(value any) (string, error) {
 }
 
 /*
+Panics if all Enum varients are not handled.
+
 Usage:
 ------
 
