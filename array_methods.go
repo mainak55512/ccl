@@ -7,6 +7,16 @@ func ForEach[T comparable](array []T, callback func(element T)) {
 	}
 }
 
+// Find function for Array
+func Find[T comparable](array []T, element T) int {
+	for i, val := range array {
+		if val == element {
+			return i
+		}
+	}
+	return -1
+}
+
 // Map function for Array
 func Map[T comparable](array []T, callback func(element T) T) []T {
 	var newArr []T

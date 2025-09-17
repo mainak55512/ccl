@@ -46,6 +46,16 @@ func (e *Enum) AddWithValue(element string, value any) {
 	}
 }
 
+func _varientHelper[T comparable](mapObj map[string]any, value T) string {
+	for k := range mapObj {
+		val, ok := mapObj[k]
+		if ok && val == value {
+			return k
+		}
+	}
+	return ""
+}
+
 func (e Enum) Varient(value any) (string, error) {
 	item, ok := value.(string)
 	if ok {
@@ -53,19 +63,13 @@ func (e Enum) Varient(value any) (string, error) {
 		if ok {
 			return item, nil
 		} else {
-			for k := range e._items {
-				val, ok := e._items[k]
-				if ok && val == value {
-					return k, nil
-				}
+			if val := _varientHelper(e._items, value); val != "" {
+				return val, nil
 			}
 		}
 	} else {
-		for k := range e._items {
-			val, ok := e._items[k]
-			if ok && val == value {
-				return k, nil
-			}
+		if val := _varientHelper(e._items, value); val != "" {
+			return val, nil
 		}
 	}
 	return "", fmt.Errorf("Enum varient doesn't exist")
