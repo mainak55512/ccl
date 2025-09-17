@@ -25,8 +25,7 @@ func (e *Enum) Freeze() {
 
 func (e *Enum) Add(element string) {
 	if !e._freezed {
-		_, ok := e._items[element]
-		if !ok {
+		if _, ok := e._items[element]; !ok {
 			e._id++
 			e._items[element] = e._id
 		}
@@ -35,11 +34,9 @@ func (e *Enum) Add(element string) {
 
 func (e *Enum) AddWithValue(element string, value any) {
 	if !e._freezed {
-		_, ok := e._items[element]
-		if !ok {
+		if _, ok := e._items[element]; !ok {
 			e._items[element] = value
-			val, ok := value.(int)
-			if ok {
+			if val, ok := value.(int); ok {
 				e._id = val
 			}
 		}
@@ -48,8 +45,7 @@ func (e *Enum) AddWithValue(element string, value any) {
 
 func _varientHelper[T comparable](mapObj map[string]any, value T) string {
 	for k := range mapObj {
-		val, ok := mapObj[k]
-		if ok && val == value {
+		if val, ok := mapObj[k]; ok && val == value {
 			return k
 		}
 	}
@@ -57,10 +53,8 @@ func _varientHelper[T comparable](mapObj map[string]any, value T) string {
 }
 
 func (e Enum) Varient(value any) (string, error) {
-	item, ok := value.(string)
-	if ok {
-		_, ok := e._items[item]
-		if ok {
+	if item, ok := value.(string); ok {
+		if _, ok := e._items[item]; ok {
 			return item, nil
 		} else {
 			if val := _varientHelper(e._items, value); val != "" {
@@ -105,8 +99,7 @@ Usage:
 func (e Enum) Match(item any, matchObj map[string]func() any) any {
 	var unattendedBranches []string
 	for k := range e._items {
-		_, ok := matchObj[k]
-		if !ok {
+		if _, ok := matchObj[k]; !ok {
 			unattendedBranches = append(unattendedBranches, k)
 		}
 	}
@@ -116,12 +109,10 @@ func (e Enum) Match(item any, matchObj map[string]func() any) any {
 		panic(fmt.Errorf("%s", strings.TrimSuffix(errmsg, ",")))
 	} else {
 		varient, _ := e.Varient(item)
-		fn, ok := matchObj[varient]
-		if ok {
+		if fn, ok := matchObj[varient]; ok {
 			return fn()
 		} else {
-			fn, ok := matchObj["_DEFAULT_"]
-			if ok {
+			if fn, ok := matchObj["_DEFAULT_"]; ok {
 				return fn()
 			}
 		}
