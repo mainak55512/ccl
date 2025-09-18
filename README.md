@@ -115,8 +115,8 @@ if err != nil {
 
 ```go
 // Create Sets from Array
-s1 := CreateSetFromArray([]string{"India", "Australia", "Brazil", "America"})
-s2 := CreateSetFromArray([]string{"Russia", "Brazil", "America", "China", "Endland", "Portugal"})
+s1 := ccl.CreateSetFromArray([]string{"India", "Australia", "Brazil", "America"})
+s2 := ccl.CreateSetFromArray([]string{"Russia", "Brazil", "America", "China", "Endland", "Portugal"})
 
 // Union method returns Set of all unique elements from both sets
 fmt.Println(s1.Union(s2).Array())        // => [China Endland Australia Brazil America India Portugal Russia]
