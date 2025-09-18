@@ -25,13 +25,16 @@ This project provides handy operations for arrays, enums, and sets, making it ea
   - Add unique elements  
   - Create sets from arrays  
   - Convert sets back to arrays  
+  - Merge two Sets with Union method
+  - Get common elements of two Sets with Intersection method
+  - Get difference of two Sets with Difference method
 
 ---
 
 ## 📦 Installation  
 
 ```bash
-go get github.com/mainak55512/ccl
+go get github.com/mainak55512/ccl@latest
 ```
 
 Then import into your project:  
@@ -111,17 +114,19 @@ if err != nil {
 ### 🔹 Set  
 
 ```go
-// Create empty set
-s := ccl.CreateSet[int]()
-s.Add(1)
-s.Add(2)
-s.Add(2) // Duplicate ignored
-fmt.Println(s.Array()) // => [1,2]
+// Create Sets from Array
+s1 := CreateSetFromArray([]string{"India", "Australia", "Brazil", "America"})
+s2 := CreateSetFromArray([]string{"Russia", "Brazil", "America", "China", "Endland", "Portugal"})
 
-// Create from array
-arr := []int{1,2,2,3,4,4,5}
-s2 := ccl.CreateSetFromArray(arr)
-fmt.Println(s2.Array()) // => [1,2,3,4,5]
+// Union method returns Set of all unique elements from both sets
+fmt.Println(s1.Union(s2).Array())        // => [China Endland Australia Brazil America India Portugal Russia]
+
+// Intersection returns Set of common elements from both sets
+fmt.Println(s1.Intersection(s2).Array()) // => [Brazil America]
+
+// Difference returns Set of elements of current Set that are not present in other set
+fmt.Println(s1.Difference(s2).Array())   // => [Australia India]
+fmt.Println(s2.Difference(s1).Array())   // => [China Endland Portugal Russia]
 ```
 
 ---
