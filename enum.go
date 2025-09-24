@@ -19,17 +19,26 @@ func CreateEnum() Enum {
 	}
 }
 
+func (e *Enum) Items() map[string]any {
+	return e._items
+}
+
+func (e *Enum) ID() int {
+	return e._id
+}
+
 func (e *Enum) Freeze() {
 	e._freezed = true
 }
 
 // Add method auto increments value under the hood
-func (e *Enum) Add(element string) {
-	if !e._freezed {
-		if _, ok := e._items[element]; !ok {
-			e._id++
-			e._items[element] = e._id
-		}
+func (e *Enum) Add(name string) {
+	if e._freezed {
+		return
+	}
+	if _, exists := e._items[name]; !exists {
+		e._items[name] = e._id
+		e._id++
 	}
 }
 
@@ -45,7 +54,7 @@ func (e *Enum) AddWithValue(element string, value any) {
 	}
 }
 
-func _varientHelper[T comparable](mapObj map[string]any, value T) string {
+func _variantHelper[T comparable](mapObj map[string]any, value T) string {
 	for k := range mapObj {
 		if val, ok := mapObj[k]; ok && val == value {
 			return k
@@ -54,26 +63,26 @@ func _varientHelper[T comparable](mapObj map[string]any, value T) string {
 	return ""
 }
 
-// Returns the Varient(string) for the Enum
-func (e Enum) Varient(value any) (string, error) {
+// Returns the Variant(string) for the Enum
+func (e Enum) Variant(value any) (string, error) {
 	if item, ok := value.(string); ok {
 		if _, ok := e._items[item]; ok {
 			return item, nil
 		} else {
-			if val := _varientHelper(e._items, value); val != "" {
+			if val := _variantHelper(e._items, value); val != "" {
 				return val, nil
 			}
 		}
 	} else {
-		if val := _varientHelper(e._items, value); val != "" {
+		if val := _variantHelper(e._items, value); val != "" {
 			return val, nil
 		}
 	}
-	return "", fmt.Errorf("Enum varient doesn't exist")
+	return "", fmt.Errorf("Enum variant doesn't exist")
 }
 
 /*
-Panics if all Enum varients are not handled.
+Panics if all Enum variants are not handled.
 
 Usage:
 ------
@@ -113,8 +122,8 @@ func (e Enum) Match(item any, matchObj map[string]func() any) any {
 		ForEach(unattendedBranches, func(e string) { errmsg += e + "," })
 		panic(fmt.Errorf("%s", strings.TrimSuffix(errmsg, ",")))
 	} else {
-		varient, _ := e.Varient(item)
-		if fn, ok := matchObj[varient]; ok {
+		variant, _ := e.Variant(item)
+		if fn, ok := matchObj[variant]; ok {
 			return fn()
 		} else {
 			if fn, ok := matchObj["_DEFAULT_"]; ok {
