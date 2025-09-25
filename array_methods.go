@@ -9,7 +9,7 @@ ForEach(arr, func(e int) {
 	fmt.Println(e)
 })
 */
-func ForEach[T comparable](array []T, callback func(element T)) {
+func ForEach[T any](array []T, callback func(element T)) {
 	for _, value := range array {
 		callback(value)
 	}
@@ -118,4 +118,42 @@ func Unique[T comparable](array []T) []T {
 		}
 	})
 	return stagingArr
+}
+
+// Chunk function for array
+/*
+Usage: 
+
+arr := []int{1,2,3,4,5}
+
+fmt.Println(Chunk(arr, 2)) // => [[1 2] [3 4] [5]]
+*/
+
+func Chunk[T comparable](array []T, chunkSize int) [][]T{
+	var newArr [][]T
+	for i := 0; i < len(array); i += chunkSize{
+		end := i + chunkSize
+		if end > len(array){
+			end = len(array)
+		}
+		newArr = append(newArr, array[i:end])
+	}
+	return newArr
+}
+
+// Flatten function for array of arrays
+/*
+Usage:
+
+arr := [][]int{{1,2},{3,4},{5}}
+fmt.Println(Flatten(arr)) // => [1 2 3 4 5]
+*/
+func Flatten[T comparable](array [][]T) []T{
+	var newArr []T
+	ForEach(array, func(sub []T) {
+		ForEach(sub, func(e T) {
+			newArr = append(newArr, e)
+		})
+	})
+	return newArr
 }
