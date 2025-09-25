@@ -140,3 +140,25 @@ func TestUnique(t *testing.T) {
 	resultStr := ccl.Unique(input_2)
 	assert.Equal(t, []string{"a", "b", "c"}, resultStr, "Result should contain only unique elements")
 }
+
+// Testing chunk function
+func TestChunk(t *testing.T) {
+	// Should pass
+	arr := []int{1, 2, 3, 4, 5}
+	assert.Equal(t, ccl.Chunk(arr, 2), [][]int{{1, 2}, {3, 4}, {5}}, "Result should be array of arrays")
+
+	// Should pass
+	arr_str := []string{"a", "a", "a", "b", "c", "c"}
+	assert.Equal(t, ccl.Chunk(arr_str, 2), [][]string{{"a", "a"}, {"a", "b"}, {"c", "c"}}, "Result should be array of arrays")
+}
+
+// Testing flatten function
+func TestFlatten(t *testing.T) {
+	// Should pass
+	arr := [][]int{{1, 2}, {3, 4}, {5}}
+	assert.Equal(t, ccl.Flatten(arr), []int{1, 2, 3, 4, 5}, "Result should be an one-dimentional array")
+
+	// Should Pass
+	arr_str := [][]string{{"a", "a"}, {"a", "b"}, {"c", "c"}}
+	assert.Equal(t, ccl.Flatten(arr_str), []string{"a", "a", "a", "b", "c", "c"}, "Result should be an one-dimentional array")
+}
