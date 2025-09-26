@@ -15,6 +15,8 @@ This project provides handy operations for arrays, enums, and sets, making it ea
   - `Reduce` → Accumulate values  
   - `Reverse` → Reverse an array  
   - `Unique` → Remove duplicates  
+  - `Chunk` → Split array into chunks of given size
+  - `Flatten` → Flatten 2D array into 1D array
 
 - **Enum Implementation**  
   - Create enums with auto-incremented or custom values  
@@ -78,6 +80,13 @@ fmt.Println(ccl.Reverse(arr)) // => [5,4,3,2,1]
 // Unique
 dupArr := []int{1,2,2,3,4,4,5}
 fmt.Println(ccl.Unique(dupArr)) // => [1,2,3,4,5]
+
+// Chunk
+fmt.Println(ccl.Chunk(arr, 2)) // => [[1 2] [3 4] [5]]
+
+// Flatten
+nested := [][]int{{1, 2}, {3, 4}, {5}}
+fmt.Println(ccl.Flatten(nested)) // => [1,2,3,4,5]
 ```
 
 ---
