@@ -152,7 +152,7 @@ fmt.Println(s2.Difference(s1).Array())   // => [China Endland Portugal Russia]
 ## 🤝 Contributing  
 
 Contributions, issues, and feature requests are welcome!  
-Feel free to open a PR or an issue.  
+Feel free to open a [PR or an issue](./CONTRIBUTING.md).  
 
 ---
 
