@@ -142,10 +142,11 @@ fmt.Println(s2.Difference(s1).Array())   // => [China Endland Portugal Russia]
 
 ## 📖 Roadmap  
 
-- [ ] Add unit tests  
-- [ ] Add more array helpers (Chunk, Flatten, etc.)  
+- ~[✓] Add unit tests~
+- ~[✓] Add more array helpers (Chunk, Flatten, etc.)~
 - [ ] Extend Enum with string-based support  
-- [ ] Optimize Set with map-based storage  
+- ~[✓] Optimize Set with map-based storage~
+- [ ] Add other types of data structures which are commonly used
 
 ---
 
