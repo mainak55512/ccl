@@ -9,5 +9,5 @@ We welcome all improvements: bug fixes, new features, documentation updates, tes
 
 1. **Fork** the repository and clone your fork:
    ```bash
-   git clone https://github.com/<your-username>/ccl.git
+   git clone https://github.com/mainak55512/ccl.git
    cd ccl
